@@ -62,8 +62,13 @@ export class DatabaseManager {
                         const array = await JSON.parse(data) as IFilter[];
                         resolve(array);
                     } catch (parseErr) {
-                        console.log("Have an exception");
-                        reject(parseErr);
+                        const filters = [
+                            { id: 0, title: "All" },
+                            { id: 1, title: "Personal" },
+                            { id: 2, title: "Sport" },
+                            { id: 3, title: "Business" },
+                          ];
+                          return filters;
                     }
                 }
             });

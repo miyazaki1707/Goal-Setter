@@ -24,19 +24,7 @@ const filterSlice = createSlice({
   initialState,
   reducers: {
     getFilters(state, action: PayloadAction<IFilter[]>) {
-      console.log(action.payload);
-            
-      if(action.payload.length == 0) {
-        const filters = [
-            { id: 0, title: "All" },
-            { id: 1, title: "Personal" },
-            { id: 2, title: "Sport" },
-            { id: 3, title: "Business" },
-          ];
-          filters.forEach((filt) => state.filters.push(filt));
-      } else {
-        action.payload.forEach((filter) => state.filters.push(filter));
-      }
+      action.payload.forEach((filter) => state.filters.push(filter));
     },
     addFilter(state, action: PayloadAction<IFilter>) {
       state.filters.push(action.payload);
