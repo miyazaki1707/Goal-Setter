@@ -59,10 +59,10 @@ export class DatabaseManager {
                     reject(err);
                 } else {
                     try {
-                        console.log(data);
                         const array = await JSON.parse(data) as IFilter[];
                         resolve(array);
                     } catch (parseErr) {
+                        console.log("Have an exception");
                         reject(parseErr);
                     }
                 }
