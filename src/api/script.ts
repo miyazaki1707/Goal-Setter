@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import dotenv from 'dotenv';
-import 'node';
+//import 'node';
 import { initializeApp } from "firebase/app";
 import { getFirestore, setDoc, doc, collection, getDocs, query, deleteDoc } from "firebase/firestore";
 import { Goal } from "../store/goals/goals.interface";
