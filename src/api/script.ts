@@ -68,7 +68,7 @@ export class DatabaseManager {
                             { id: 2, title: "Sport" },
                             { id: 3, title: "Business" },
                           ];
-                          return filters;
+                          resolve(filters);
                     }
                 }
             });
