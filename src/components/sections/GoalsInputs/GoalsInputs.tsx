@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { closeModal } from "../../../store/modals/modalReducer";
+import { closeModal, openModal } from "../../../store/modals/modalReducer";
 import Input from "../../ui/Input/Input";
 import DatePicker from "../../ui/DatePicker/DatePicker";
 import { Goal } from "../../../store/goals/goals.interface";
@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/Select/select";
 import { RootState } from "../../../store/store";
 import { IFilter } from "../../../store/filters/filtersSlice";
+import CreateModal from "../../modals/CreateModal/CreateModal";
 
 type Props = {
   onGoalDataChange: (data: Partial<Goal>) => void;
@@ -22,7 +23,7 @@ export default function GoalsInputs({ onGoalDataChange }: Props) {
   const [category, setCategory] = useState<string>("");
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const filters = useSelector((state: RootState) => state.filters.filters);
-
+  const [onFilterClick, setOnFilterClick] = useState<boolean>(false);
   useEffect(() => {
     onGoalDataChange({ title: goalName, date: dueDate, motivation, imageUrl: preview, category: category });
   }, [goalName, dueDate, motivation, preview, category]);
@@ -120,6 +121,7 @@ export default function GoalsInputs({ onGoalDataChange }: Props) {
       <div className='pb-5'>
         <p className='mb-2'>Category</p>
         <Select
+          open={isSelectOpen}
           onOpenChange={setIsSelectOpen}
           onValueChange={setCategory}>
           <SelectTrigger className='w-full bg-[#FAFAFA] border-[2px] focus:outline-none border-[#EBEBEB] rounded-xl '>
@@ -137,10 +139,33 @@ export default function GoalsInputs({ onGoalDataChange }: Props) {
                 );
               }
             })}
+            <div
+              className={
+                "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-4 text-[#808080] pr-2 text-sm outline-none focus:bg-neutral-100 focus:text-neutral-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 dark:focus:bg-neutral-800 dark:focus:text-neutral-50"
+              }
+              onClick={() => {
+                dispatch(openModal());
+                setIsSelectOpen(false);
+                setOnFilterClick(true);
+              }}>
+              Create a category
+            </div>
           </SelectContent>
         </Select>
       </div>
       {isSelectOpen && <div className='fixed inset-0 z-10 bg-transparent' />}
+      {onFilterClick ? (
+        <CreateModal
+          title='Category Name'
+          buttonName='create a category'
+          item='filter'
+          isDate={false}
+          type='create'
+          setOnFilterClick={setOnFilterClick}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

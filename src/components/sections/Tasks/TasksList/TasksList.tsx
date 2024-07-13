@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Button } from "../../../ui/Button/button";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../../../store/modals/modalReducer";
-import TaskModal from "../../../modals/CreateModal/CreateModal";
 import { Task } from "../../../../store/goals/goals.interface";
+import CreateModal from "../../../modals/CreateModal/CreateModal";
 
 type Props = {
   onTasksChange: (tasks: Task[]) => void;
@@ -12,7 +12,7 @@ type Props = {
 export default function TasksList({ onTasksChange }: Props) {
   const dispatch = useDispatch();
   const [tasks, setTasks] = useState<Task[]>([]);
-
+  const [onTaskClick, setOnTaskClick] = useState(false);
   useEffect(() => {
     onTasksChange(tasks);
   }, [tasks]);
@@ -25,7 +25,6 @@ export default function TasksList({ onTasksChange }: Props) {
       prevTasks.map((task, i) => (i === index ? { ...task, isItOngoing: !task.isItOngoing } : task)),
     );
   };
-
   return (
     <div className='pb-10'>
       <p>Tasks</p>
@@ -48,18 +47,26 @@ export default function TasksList({ onTasksChange }: Props) {
         </div>
       ))}
       <Button
-        onClick={() => dispatch(openModal())}
+        onClick={() => {
+          dispatch(openModal());
+          setOnTaskClick(true);
+        }}
         className='w-[100%] font-normal mt-4'
         variant={"ghost"}>
         Add a new task
       </Button>
-      <TaskModal
-        title='Task name'
-        buttonName='Add Task'
-        onAddTask={addTask}
-        item='task'
-        type='create'
-      />
+      {onTaskClick ? (
+        <CreateModal
+          title='Task name'
+          buttonName='Add Task'
+          onAddTask={addTask}
+          item='task'
+          type='create'
+          setOnTaskClick={setOnTaskClick}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

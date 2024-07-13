@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/store";
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, useEffect, useRef, useState } from "react";
 import Input from "../../ui/Input/Input";
 import DatePicker from "../../ui/DatePicker/DatePicker";
 import { Button } from "../../ui/Button/button";
@@ -20,6 +20,8 @@ interface TaskModalProps {
   task?: Task;
   item: "filter" | "task";
   type: "create" | "edit" | "add";
+  setOnTaskClick?: Dispatch<boolean>;
+  setOnFilterClick?: Dispatch<boolean>;
 }
 
 export default function CreateModal({
@@ -32,6 +34,8 @@ export default function CreateModal({
   task,
   type,
   item,
+  setOnTaskClick,
+  setOnFilterClick,
 }: TaskModalProps) {
   const location = useLocation();
   const { goal } = location.state || {};
@@ -53,12 +57,13 @@ export default function CreateModal({
       }
     }
   }, [isOpen, type, filter, task]);
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && (containerRef.current as HTMLElement).contains(event.target as Node)) {
         dispatch(closeModal());
         setDueDate("");
+        setOnTaskClick && setOnTaskClick(false);
+        setOnFilterClick && setOnFilterClick(false);
         if (type === "create" || type === "add") {
           setName("");
           setDueDate("");
@@ -125,6 +130,8 @@ export default function CreateModal({
     if (item === "filter") {
       actionsWithFilter();
     }
+    setOnTaskClick && setOnTaskClick(false);
+    setOnFilterClick && setOnFilterClick(false);
   };
 
   const clickOnDelete = () => {
