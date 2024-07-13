@@ -34,15 +34,24 @@ const filterSlice = createSlice({
     },
     removeFilter(state, action: PayloadAction<IFilter>) {
       state.filters = state.filters.filter((fil) => fil !== action.payload);
+      const tg = Telegram.WebApp;
+      const db = tg.CloudStorage;
+      db.setItem("filters", JSON.stringify(state.filters));
     },
     editFilter(state, action: PayloadAction<{ id: number; text: string }>) {
       const filter = state.filters.find((filter) => filter.id === action.payload.id);
       if (filter) {
         filter!.title = action.payload.text;
       }
+      const tg = Telegram.WebApp;
+      const db = tg.CloudStorage;
+      db.setItem("filters", JSON.stringify(state.filters));
     },
     deleteFilter(state, action: PayloadAction<{ filterId: number }>) {
       state.filters = state.filters.filter((filter: IFilter) => filter.id !== action.payload.filterId);
+      const tg = Telegram.WebApp;
+      const db = tg.CloudStorage;
+      db.setItem("filters", JSON.stringify(state.filters));
     },
   },
 });
